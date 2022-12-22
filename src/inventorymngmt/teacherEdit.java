@@ -4,17 +4,38 @@
  */
 package inventorymngmt;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author alvin1904
  */
 public class teacherEdit extends javax.swing.JFrame {
-
+    Connection con =null;
+    Statement st = null;
+    PreparedStatement pst = null;  
+    ResultSet rs = null;
     /**
      * Creates new form addRequest
      */
     public teacherEdit() {
         initComponents();
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/InventoryMgmtRIT?zeroDateTimeBehavior=CONVERT_TO_NULL","root","password");
+        }
+        catch(ClassNotFoundException | SQLException e){
+            System.out.println(e);
+        }
     }
 
     /**
@@ -29,11 +50,11 @@ public class teacherEdit extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        t2 = new javax.swing.JComboBox<>();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        t1 = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -52,31 +73,46 @@ public class teacherEdit extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         jLabel1.setText("Teacher Name:");
 
-        jComboBox1.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
-        jComboBox1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        t2.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        t2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jButton2.setBackground(new java.awt.Color(51, 204, 255));
         jButton2.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("GET TEACHERS");
         jButton2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setBackground(new java.awt.Color(255, 0, 0));
         jButton3.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("SET AS RETIRED");
         jButton3.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         jLabel2.setText("Teacher Name: ");
 
-        jTextField1.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        t1.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
 
         jButton4.setBackground(new java.awt.Color(0, 204, 255));
         jButton4.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         jButton4.setForeground(new java.awt.Color(255, 255, 255));
         jButton4.setText("ADD TEACHER");
         jButton4.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -93,7 +129,7 @@ public class teacherEdit extends javax.swing.JFrame {
                                 .addGap(109, 109, 109)
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(t1, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(181, 181, 181)
                                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -102,7 +138,7 @@ public class teacherEdit extends javax.swing.JFrame {
                                 .addGap(173, 173, 173)
                                 .addComponent(jLabel1)
                                 .addGap(18, 18, 18)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(t2, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -121,9 +157,9 @@ public class teacherEdit extends javax.swing.JFrame {
                         .addGap(108, 108, 108)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(t1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(t2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(200, 200, 200)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -157,6 +193,63 @@ public class teacherEdit extends javax.swing.JFrame {
         this.setVisible(false);
         new Home().setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        String t1name = t1.getText();
+        if(t1name.equals("")){
+            JOptionPane.showMessageDialog(null, "Enter details and try again!");
+        }
+        else{
+            try {
+                int t1id = new Random().nextInt(9000) + 1000;
+                pst=con.prepareStatement("insert into teacher values((?),(?),'working')");
+                pst.setInt(1, t1id);
+                pst.setString(2, t1name);
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Teacher Added!");
+                t1.setText("");
+        } catch (SQLException ex) {
+                Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        }
+
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        t2.removeAllItems();
+        try {
+            pst=con.prepareStatement("SELECT teacherName FROM teacher where currentStatus!='retired'");
+            rs=pst.executeQuery();
+            while(rs.next()){
+                t2.addItem(rs.getString("teacherName"));
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+            String t2name = t2.getSelectedItem().toString();
+                            
+                int proceed = JOptionPane.showConfirmDialog(null, "Set "+t2name+" as retired?", "Alert", JOptionPane.ERROR_MESSAGE);
+                
+                if(proceed == JOptionPane.YES_OPTION){
+                try {
+                    pst=con.prepareStatement("UPDATE teacher set currentStatus='retired' where teacherName=(?)");
+                    pst.setString(1, t2name);
+                    pst.executeUpdate();   
+                } catch (SQLException ex) {
+                    Logger.getLogger(teacherEdit.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                    t2.removeAllItems();
+                }
+
+
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -201,10 +294,10 @@ public class teacherEdit extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField t1;
+    private javax.swing.JComboBox<String> t2;
     // End of variables declaration//GEN-END:variables
 }
