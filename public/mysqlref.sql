@@ -18,6 +18,7 @@ CREATE TABLE `resourceUtilisationLog` (
 	`teacherId` INT,
 	`itemId` INT,
 	`dateOfIssue` DATE,
+	`quantity` INT,
     FOREIGN KEY(teacherId) REFERENCES teacher(teacherId),
     FOREIGN KEY(itemId) REFERENCES stockDetails(itemId)
 );
@@ -32,4 +33,4 @@ insert into stockDetails values(50001, 'Duster', 5);
 insert into stockDetails values(50002, 'Pen', 6);
 insert into stockDetails values(50003, 'Pencil', 14);
 
-DROP DATABASE InventoryMgmtRIT;
+

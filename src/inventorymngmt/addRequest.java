@@ -7,17 +7,38 @@ package inventorymngmt;
 import java.time.LocalDate;
 import java.util.Random;
 
+import java.sql.Connection;
+import java.sql.Statement;        
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 /**
  *
  * @author alvin1904
  */
 public class addRequest extends javax.swing.JFrame {
 
+    Connection con =null;
+    Statement st = null;
+    PreparedStatement pst = null;  
+    ResultSet rs = null;
     /**
      * Creates new form addRequest
      */
     public addRequest() {
         initComponents();
+        
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/InventoryMgmtRIT?zeroDateTimeBehavior=CONVERT_TO_NULL","root","password");
+        }
+        catch(ClassNotFoundException | SQLException e){
+            System.out.println(e);
+        }
     }
 
     /**
@@ -32,15 +53,15 @@ public class addRequest extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        tname = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        iname = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        tdate = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        qty = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        reqid = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
@@ -61,36 +82,36 @@ public class addRequest extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         jLabel1.setText("Teacher Name");
 
-        jComboBox1.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        tname.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         jLabel2.setText("Item Name");
 
-        jComboBox3.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        iname.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         jLabel3.setText("Today's Date");
 
-        jTextField2.setEditable(false);
-        jTextField2.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        tdate.setEditable(false);
+        tdate.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         jLabel4.setText("Quantity");
 
-        jComboBox2.setEditable(true);
-        jComboBox2.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", " " }));
-        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+        qty.setEditable(true);
+        qty.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        qty.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", " " }));
+        qty.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox2ActionPerformed(evt);
+                qtyActionPerformed(evt);
             }
         });
 
         jLabel5.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         jLabel5.setText("Request ID");
 
-        jTextField3.setEditable(false);
-        jTextField3.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        reqid.setEditable(false);
+        reqid.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
 
         jButton2.setBackground(new java.awt.Color(255, 0, 0));
         jButton2.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
@@ -141,16 +162,16 @@ public class addRequest extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(iname, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(176, 176, 176)
                             .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(66, 66, 66))
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(qty, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(reqid, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(tname, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tdate, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(442, 442, 442))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -170,27 +191,27 @@ public class addRequest extends javax.swing.JFrame {
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(tname, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(43, 43, 43)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tdate, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addGap(52, 52, 52)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(iname, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))
                         .addGap(49, 49, 49))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(28, 28, 28)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(qty, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addGap(46, 46, 46)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(reqid, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
                 .addGap(55, 55, 55)
                 .addComponent(jLabel6)
@@ -219,39 +240,88 @@ public class addRequest extends javax.swing.JFrame {
         new Home().setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+    private void qtyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_qtyActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox2ActionPerformed
+    }//GEN-LAST:event_qtyActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        if(jTextField2.getText().equals("") || jTextField3.getText().equals("")){
-            System.out.println("asdasd");
+        if(tdate.getText().equals("") || reqid.getText().equals("")){
             jLabel6.setVisible(true);
         }
         else{
-            String[] empti = {};
-            jTextField2.setText("");
-            jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(empti));
-            jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(empti));
-            jTextField3.setText("");
+            
+            try {
+                int requestid=0, teachid=0, itemid=0;
+                String date = tdate.getText();
+                int qnty = Integer.parseInt(qty.getSelectedItem().toString());
+                
+                String name = tname.getSelectedItem().toString();
+                pst=con.prepareStatement("SELECT teacherID from teacher where teacherName = (?)");
+                pst.setString(1, name);
+                ResultSet rs = pst.executeQuery();
+                if(rs.next())
+                    teachid = Integer.parseInt(rs.getString("teacherID"));
+                
+                String namei = iname.getSelectedItem().toString();
+                pst=con.prepareStatement("SELECT itemId from stockDetails where itemName = (?)");
+                pst.setString(1, namei);
+                ResultSet rsa = pst.executeQuery();
+                if(rsa.next())
+                    itemid = Integer.parseInt(rsa.getString("itemId"));
+                
+                requestid = Integer.parseInt(reqid.getText());
+                
+                int proceed = JOptionPane.showConfirmDialog(null, "Proceed with the request?", "Alert", JOptionPane.ERROR_MESSAGE);
+                
+                if(proceed == JOptionPane.YES_OPTION){
+                    pst=con.prepareStatement("INSERT INTO resourceUtilisationLog values((?),(?),(?),(?),(?))");
+                    pst.setInt(1, requestid);
+                    pst.setInt(2, teachid);
+                    pst.setInt(3, itemid);
+                    pst.setString(4, date);
+                    pst.setInt(5, qnty);
+                    pst.executeUpdate();      
+                    String[] empti = {};
+                    tdate.setText("");
+                    tname.setModel(new javax.swing.DefaultComboBoxModel(empti));
+                    iname.setModel(new javax.swing.DefaultComboBoxModel(empti));
+                    reqid.setText("");
+                    qty.setSelectedIndex(0);
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
+            }
+           
         }
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        if(jTextField2.getText().equals("") && jTextField3.getText().equals("")){
-            jTextField2.setText((LocalDate.now()).toString());
-            String[] teachers = {"Eldose", "Sreerag"};
-            jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(teachers));
-            String[] items = {"chalk", "duster", "pen"};
-            jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(items));
-            Random rand = new Random();
-            long drand = (long)(rand.nextDouble()*10000000000L);
-            jTextField3.setText(String.valueOf(drand));
+        if(tdate.getText().equals("") && reqid.getText().equals("")){
+            tdate.setText((LocalDate.now()).toString());
+            int drand = new Random().nextInt(900000) + 100000;
+            reqid.setText(String.valueOf(drand));
             jLabel6.setVisible(false);
         }
+        
+        try {
+            pst=con.prepareStatement("SELECT teacherName FROM teacher where currentStatus!='retired'");
+            rs=pst.executeQuery();
+            while(rs.next()){
+                tname.addItem(rs.getString("teacherName"));
+            }
+            pst=con.prepareStatement("SELECT itemName FROM stockDetails");
+            rs=pst.executeQuery();
+            while(rs.next()){
+                iname.addItem(rs.getString("itemName"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
 
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -293,12 +363,10 @@ public class addRequest extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> iname;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -306,7 +374,9 @@ public class addRequest extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JComboBox<String> qty;
+    private javax.swing.JTextField reqid;
+    private javax.swing.JTextField tdate;
+    private javax.swing.JComboBox<String> tname;
     // End of variables declaration//GEN-END:variables
 }
