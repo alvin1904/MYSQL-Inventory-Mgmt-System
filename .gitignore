@@ -7,3 +7,4 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+public/mysql-connector-j-8.0.31
