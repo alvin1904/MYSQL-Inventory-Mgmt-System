@@ -88,6 +88,11 @@ public class addRequest extends javax.swing.JFrame {
         jLabel2.setText("Item Name");
 
         iname.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        iname.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inameActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         jLabel3.setText("Today's Date");
@@ -250,20 +255,42 @@ public class addRequest extends javax.swing.JFrame {
             jLabel6.setVisible(true);
         }
         else{
+                String namei = iname.getSelectedItem().toString();
+                String name = tname.getSelectedItem().toString();
+                int newCount=0;
             
             try {
+//                CHECKING IF QUANTITY IS ENOUGH
                 int requestid=0, teachid=0, itemid=0;
                 String date = tdate.getText();
                 int qnty = Integer.parseInt(qty.getSelectedItem().toString());
+                           
+                    int target=0;
+                    try {
+                            pst=con.prepareStatement("SELECT presentCount FROM stockDetails where itemName = (?)");
+                            pst.setString(1, namei);
+                            rs=pst.executeQuery();
+                            while(rs.next())
+                                target = Integer.parseInt(rs.getString("presentCount"));
+                    } catch (SQLException ex) {
+                            Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 
-                String name = tname.getSelectedItem().toString();
+                    if(target<qnty){
+                        JOptionPane.showMessageDialog(null, "The request cannot be accepted since there is not enough stock!");
+                        return;
+                    }else{
+                        newCount = target-qnty;
+                    }
+                
+                
+//                GETTING TEACHER ID ITEM ID
                 pst=con.prepareStatement("SELECT teacherID from teacher where teacherName = (?)");
                 pst.setString(1, name);
                 ResultSet rs = pst.executeQuery();
                 if(rs.next())
                     teachid = Integer.parseInt(rs.getString("teacherID"));
                 
-                String namei = iname.getSelectedItem().toString();
                 pst=con.prepareStatement("SELECT itemId from stockDetails where itemName = (?)");
                 pst.setString(1, namei);
                 ResultSet rsa = pst.executeQuery();
@@ -271,6 +298,8 @@ public class addRequest extends javax.swing.JFrame {
                     itemid = Integer.parseInt(rsa.getString("itemId"));
                 
                 requestid = Integer.parseInt(reqid.getText());
+                
+                
                 
                 int proceed = JOptionPane.showConfirmDialog(null, "Proceed with the request?", "Alert", JOptionPane.ERROR_MESSAGE);
                 
@@ -293,7 +322,19 @@ public class addRequest extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
             }
-           
+            
+            
+            try {
+                    pst=con.prepareStatement("UPDATE stockDetails set presentCount=(?) where itemName=(?)");
+                    pst.setInt(1, newCount);
+                    pst.setString(2, namei);
+                    pst.executeUpdate();   
+                    pst.close();
+                    JOptionPane.showMessageDialog(null, "Request accepted!");
+                } catch (SQLException ex) {
+                    Logger.getLogger(teacherEdit.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
         }
 
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -324,6 +365,10 @@ public class addRequest extends javax.swing.JFrame {
         
 
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void inameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inameActionPerformed
 
     /**
      * @param args the command line arguments
