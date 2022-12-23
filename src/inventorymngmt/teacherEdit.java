@@ -189,9 +189,10 @@ public class teacherEdit extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        this.setVisible(false);
-        new Home().setVisible(true);
+
+            this.setVisible(false);
+            new Home().setVisible(true);
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -220,7 +221,7 @@ public class teacherEdit extends javax.swing.JFrame {
         // TODO add your handling code here:
         t2.removeAllItems();
         try {
-            pst=con.prepareStatement("SELECT teacherName FROM teacher where currentStatus!='retired'");
+            pst=con.prepareStatement("SELECT teacherName FROM teacher where currentStatus!='retired' order by teacherName");
             rs=pst.executeQuery();
             while(rs.next()){
                 t2.addItem(rs.getString("teacherName"));
@@ -242,6 +243,7 @@ public class teacherEdit extends javax.swing.JFrame {
                     pst=con.prepareStatement("UPDATE teacher set currentStatus='retired' where teacherName=(?)");
                     pst.setString(1, t2name);
                     pst.executeUpdate();   
+                    pst.close();
                 } catch (SQLException ex) {
                     Logger.getLogger(teacherEdit.class.getName()).log(Level.SEVERE, null, ex);
                 }

@@ -68,7 +68,7 @@ public class Home extends javax.swing.JFrame {
 
         jButton4.setBackground(new java.awt.Color(153, 255, 204));
         jButton4.setFont(new java.awt.Font("Monospaced", 0, 36)); // NOI18N
-        jButton4.setText("UPDATE INVENTORY");
+        jButton4.setText("INVENTORY EDIT");
         jButton4.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

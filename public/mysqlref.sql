@@ -23,14 +23,3 @@ CREATE TABLE `resourceUtilisationLog` (
     FOREIGN KEY(itemId) REFERENCES stockDetails(itemId)
 );
 
-insert into teacher values(10000, 'Sreerag', 'working');
-insert into teacher values(10001, 'Mohanlal', 'retired');
-insert into teacher values(10002, 'Dileep', 'working');
-insert into teacher values(10003, 'Ikka', 'retired');
-
-insert into stockDetails values(50000, 'Chalk', 4);
-insert into stockDetails values(50001, 'Duster', 5);
-insert into stockDetails values(50002, 'Pen', 6);
-insert into stockDetails values(50003, 'Pencil', 14);
-
-

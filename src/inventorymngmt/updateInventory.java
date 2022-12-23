@@ -4,17 +4,38 @@
  */
 package inventorymngmt;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author alvin1904
  */
 public class updateInventory extends javax.swing.JFrame {
-
+    Connection con =null;
+    Statement st = null;
+    PreparedStatement pst = null;  
+    ResultSet rs = null;
     /**
      * Creates new form addRequest
      */
     public updateInventory() {
         initComponents();
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/InventoryMgmtRIT?zeroDateTimeBehavior=CONVERT_TO_NULL","root","password");
+        }
+        catch(ClassNotFoundException | SQLException e){
+            System.out.println(e);
+        }
     }
 
     /**
@@ -29,17 +50,17 @@ public class updateInventory extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        item1 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        count1 = new javax.swing.JTextField();
         jButton5 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        item2 = new javax.swing.JComboBox<>();
         jButton6 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        count2 = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        count3 = new javax.swing.JTextField();
         jButton7 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -58,25 +79,30 @@ public class updateInventory extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         jLabel3.setText("Item Name");
 
-        jTextField2.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        item1.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         jLabel4.setText("Present Count");
 
-        jTextField3.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        count1.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
 
         jButton5.setBackground(new java.awt.Color(255, 51, 51));
         jButton5.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         jButton5.setForeground(new java.awt.Color(255, 255, 255));
-        jButton5.setText("ADD ITEM TO INVENTORY");
+        jButton5.setText("ADD NEW ITEM");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         jLabel5.setText("Item Name");
 
-        jComboBox2.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
-        jComboBox2.addItemListener(new java.awt.event.ItemListener() {
+        item2.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        item2.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jComboBox2ItemStateChanged(evt);
+                item2ItemStateChanged(evt);
             }
         });
 
@@ -84,17 +110,22 @@ public class updateInventory extends javax.swing.JFrame {
         jButton6.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         jButton6.setForeground(new java.awt.Color(255, 255, 255));
         jButton6.setText("GET ITEMS");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         jLabel6.setText("Present Count:");
 
-        jTextField4.setEditable(false);
-        jTextField4.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        count2.setEditable(false);
+        count2.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
 
         jLabel7.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
-        jLabel7.setText("New Count:");
+        jLabel7.setText("Incoming Count:");
 
-        jTextField5.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        count3.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
 
         jButton7.setBackground(new java.awt.Color(255, 51, 51));
         jButton7.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
@@ -118,19 +149,19 @@ public class updateInventory extends javax.swing.JFrame {
                                             .addComponent(jLabel4))
                                         .addGap(50, 50, 50)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(item1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(count1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(408, 408, 408))
                                     .addComponent(jLabel7)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addGap(197, 197, 197)
-                                .addComponent(jButton5)
+                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel6)))
                         .addGap(26, 26, 26)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(count2, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(count3, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addComponent(jButton1)))
@@ -144,7 +175,7 @@ public class updateInventory extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addGap(65, 65, 65)
-                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(item2, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(159, 159, 159))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -159,27 +190,27 @@ public class updateInventory extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(61, 61, 61)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(item1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(count1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4))
                         .addGap(55, 55, 55)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(count2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(item2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(35, 35, 35)
                         .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(115, 115, 115)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(count3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
                 .addGap(33, 33, 33)
                 .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -202,14 +233,82 @@ public class updateInventory extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+
         this.setVisible(false);
         new Home().setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jComboBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox2ItemStateChanged
+    private void item2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_item2ItemStateChanged
         // TODO add your handling code here:
-        System.out.println(jComboBox2.getSelectedItem());
-    }//GEN-LAST:event_jComboBox2ItemStateChanged
+        jButton6.setText("GET ITEMS");
+        if(allowCount==true){
+            String count2item = item2.getSelectedItem().toString();
+            if(count2.getText().equals("") || allowCount==true){
+                System.out.println(count2item);
+                try {
+                pst=con.prepareStatement("SELECT presentCount FROM stockDetails where itemName = (?)");
+                pst.setString(1, count2item);
+                rs=pst.executeQuery();
+                while(rs.next()){
+                    count2.setText(rs.getString("presentCount"));
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            }
+        }
+
+    }//GEN-LAST:event_item2ItemStateChanged
+    private boolean allowCount= false;
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        jButton6.setText("CLEAR ITEMS");
+        allowCount=false;
+        String aitem1 = item1.getText();
+
+        if(aitem1.equals("")){
+            JOptionPane.showMessageDialog(null, "Enter details and try again!");
+        }
+        else{
+            try {
+                int acount1 = Integer.parseInt(count1.getText());
+                int i1id = new Random().nextInt(90000) + 10000;
+                pst=con.prepareStatement("insert into stockDetails values((?),(?),(?))");
+                pst.setInt(1, i1id);
+                pst.setString(2, aitem1);
+                pst.setInt(3, acount1);
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Item Added!");
+                item1.setText("");
+                count1.setText("");
+        } catch (SQLException ex) {
+                Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        }
+        
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        if(count2.getText().equals("")){
+            item2.removeAllItems();
+            try {
+                pst=con.prepareStatement("SELECT itemName FROM stockDetails order by presentCount desc");
+                rs=pst.executeQuery();
+                while(rs.next()){
+                    item2.addItem(rs.getString("itemName"));
+                allowCount=true;    
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else{
+            count2.setText("");
+            item2.setSelectedIndex(0);
+        }
+
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -248,20 +347,20 @@ public class updateInventory extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField count1;
+    private javax.swing.JTextField count2;
+    private javax.swing.JTextField count3;
+    private javax.swing.JTextField item1;
+    private javax.swing.JComboBox<String> item2;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
     // End of variables declaration//GEN-END:variables
 }
