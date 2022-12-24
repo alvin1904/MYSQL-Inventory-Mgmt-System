@@ -4,17 +4,38 @@
  */
 package inventorymngmt;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author alvin1904
  */
 public class viewRequests extends javax.swing.JFrame {
-
+    Connection con =null;
+    Statement st = null;
+    PreparedStatement pst = null;  
+    ResultSet rs = null;
     /**
      * Creates new form addRequest
      */
     public viewRequests() {
         initComponents();
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/InventoryMgmtRIT?zeroDateTimeBehavior=CONVERT_TO_NULL","root","password");
+        }
+        catch(ClassNotFoundException | SQLException e){
+            System.out.println(e);
+        }
     }
 
     /**
@@ -29,7 +50,13 @@ public class viewRequests extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablereq = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        tn = new javax.swing.JComboBox<>();
+        in = new javax.swing.JComboBox<>();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -44,26 +71,72 @@ public class viewRequests extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablereq.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
+        tablereq.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Teacher Name", "Item Name", "Date", "Quantity"
+                "requestId", "Teacher Name", "Item Name", "Date", "Quantity"
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        tablereq.setRowHeight(50);
+        jScrollPane1.setViewportView(tablereq);
+
+        jLabel1.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        jLabel1.setText("Teacher Name");
+
+        jButton2.setBackground(new java.awt.Color(51, 204, 255));
+        jButton2.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(255, 255, 255));
+        jButton2.setText("GET DETAILS");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        jLabel2.setText("Item Name");
+
+        tn.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        tn.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                tnItemStateChanged(evt);
+            }
+        });
+
+        in.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        in.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                inItemStateChanged(evt);
+            }
+        });
+
+        jButton3.setBackground(new java.awt.Color(255, 0, 0));
+        jButton3.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(255, 255, 255));
+        jButton3.setText("FETCH RECORDS");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -72,19 +145,46 @@ public class viewRequests extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jButton1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(36, 36, 36)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1300, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(42, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButton1)
+                                .addGap(100, 100, 100)
+                                .addComponent(jLabel1)))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(tn, 0, 272, Short.MAX_VALUE)
+                            .addComponent(in, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 118, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(tn, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(in, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33))
         );
@@ -108,6 +208,103 @@ public class viewRequests extends javax.swing.JFrame {
         this.setVisible(false);
         new Home().setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+
+    private void tnItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_tnItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tnItemStateChanged
+
+    private void inItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_inItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inItemStateChanged
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        
+        tn.removeAllItems();
+        tn.addItem("");
+        try {
+            pst=con.prepareStatement("SELECT teacherName FROM teacher where currentStatus!='retired' order by teacherName");
+            rs=pst.executeQuery();
+            while(rs.next()){
+                tn.addItem(rs.getString("teacherName"));
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+            in.removeAllItems();
+            in.addItem("");
+            try {
+                pst=con.prepareStatement("SELECT itemName FROM stockDetails order by itemName");
+                rs=pst.executeQuery();
+                while(rs.next()){
+                    in.addItem(rs.getString("itemName"));
+                in.setSelectedIndex(0);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        String tname="", iname="";
+        try{
+            tname = tn.getSelectedItem().toString();
+            iname = in.getSelectedItem().toString();
+        }catch(NullPointerException e){
+            JOptionPane.showMessageDialog(null, "Click on Get Details and try again!");
+            return;
+        }
+        
+            boolean b = true;
+            try {
+                    if(tname.equals("") && iname.equals("")){
+                        JOptionPane.showMessageDialog(null, "Select from the list and try again!");
+                        return;
+                    }
+                    else if (tname.equals("")){
+                        pst = con.prepareStatement("SELECT r.requestId, s.itemName, t.teacherName, r.dateOfIssue, r.quantity FROM resourceUtilisationLog r NATURAL JOIN stockDetails s NATURAL JOIN teacher t where s.itemName=(?) order by r.dateOfIssue desc");
+                        pst.setString(1, iname);
+                    }
+                    else if(iname.equals("")){
+                        pst = con.prepareStatement("SELECT r.requestId, t.teacherName, s.itemName, r.dateOfIssue, r.quantity FROM resourceUtilisationLog r NATURAL JOIN teacher t NATURAL JOIN stockDetails s where t.teacherName=(?) order by r.dateOfIssue desc");
+                        pst.setString(1, tname);
+                    }
+                    else{
+                        b=false;
+                        pst = con.prepareStatement("SELECT r.requestId, t.teacherName, s.itemName, r.dateOfIssue, r.quantity FROM resourceUtilisationLog r NATURAL JOIN teacher t NATURAL JOIN stockDetails s where t.teacherName=(?) and s.itemName=(?) order by r.dateOfIssue desc");
+                        pst.setString(1, tname);
+                        pst.setString(2, iname);
+                    }
+                    rs=pst.executeQuery();
+                    
+            String reqid, teacherName, itemName, dateOfIssue, quantity;
+            DefaultTableModel model = (DefaultTableModel) tablereq.getModel();
+            model.setRowCount(0);
+                int i = 0;
+                while (rs.next()) {
+                    i++;
+                    reqid = rs.getString("requestId");
+                    teacherName = rs.getString("teacherName");
+                    itemName = rs.getString("itemName");
+                    dateOfIssue = rs.getString("dateOfIssue");
+                    quantity = rs.getString("quantity");
+                    model.addRow(new Object[]{reqid, teacherName, itemName, dateOfIssue, quantity}); 
+                }            
+                if(i==0){
+                    JOptionPane.showMessageDialog(null, "No records found!");
+                }
+            
+            } catch (SQLException ex) {
+                    Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -146,9 +343,15 @@ public class viewRequests extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> in;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tablereq;
+    private javax.swing.JComboBox<String> tn;
     // End of variables declaration//GEN-END:variables
 }

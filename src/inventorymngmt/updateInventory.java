@@ -290,7 +290,7 @@ public class updateInventory extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
-
+            item2.removeAllItems();
             try {
                 pst=con.prepareStatement("SELECT itemName FROM stockDetails order by presentCount desc");
                 rs=pst.executeQuery();
