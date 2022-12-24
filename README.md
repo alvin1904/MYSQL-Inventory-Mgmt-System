@@ -39,6 +39,7 @@ This runs the jar file.
 
 
 ## Using the app
+[InventorMgmtRIT.webm](https://user-images.githubusercontent.com/83529451/209429471-e8ef13f8-e6ad-4253-b092-fcdbfdc16c54.webm)
 
 
 
