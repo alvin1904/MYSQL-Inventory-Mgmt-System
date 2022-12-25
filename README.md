@@ -3,12 +3,12 @@
 This is a standalone application that can be used in institutions and office spaces to maintain and effectively
 keep track of the resource utilisation by the employees of your company.
 
-Team:
-Alvin Varghese
-Anson Anthrayose Thomas
-Sreerag M
-Vignesh R Pillai
-(RIT, Kottayam)
+Team:<br>
+Alvin Varghese<br>
+Anson Anthrayose Thomas<br>
+Sreerag M<br>
+Vignesh R Pillai<br>
+(RIT, Kottayam)<br>
 
 ## Installation
 
@@ -43,7 +43,7 @@ This runs the jar file.
 
 
 
-## Acknowledgements
+## Downloads
 
  - [MYSQL Community Server](https://dev.mysql.com/downloads/mysql/)
  - [Apache NetBeans](https://netbeans.apache.org/download/nb16/)
