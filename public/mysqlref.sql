@@ -22,4 +22,10 @@ CREATE TABLE `resourceUtilisationLog` (
     FOREIGN KEY(teacherId) REFERENCES teacher(teacherId),
     FOREIGN KEY(itemId) REFERENCES stockDetails(itemId)
 );
+CREATE TABLE `sudoUsers` (
+	`username` VARCHAR(30) UNIQUE,
+	`password` VARCHAR(30)
+);
+INSERT into sudoUsers values('admin','1234');
+
 

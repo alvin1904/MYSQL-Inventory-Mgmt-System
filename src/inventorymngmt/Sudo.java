@@ -4,17 +4,35 @@
  */
 package inventorymngmt;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author alvin1904
  */
 public class Sudo extends javax.swing.JFrame {
-
+    Connection con =null;
+    PreparedStatement pst = null;  
+    ResultSet rs = null;
     /**
      * Creates new form Sudo
      */
     public Sudo() {
         initComponents();
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/InventoryMgmtRIT?zeroDateTimeBehavior=CONVERT_TO_NULL","root","password");
+        }
+        catch(ClassNotFoundException | SQLException e){
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
+        }
     }
 
     /**
@@ -36,12 +54,27 @@ public class Sudo extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         jButton1.setText("CLEAR THE RESOURCE UTILISATION LOG");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         jButton2.setText("CLEAR THE TEACHERS TABLE");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         jButton3.setText("CLEAR THE STOCK TABLE");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Monospaced", 0, 36)); // NOI18N
         jLabel1.setText("SUDO OPERATIONS");
@@ -97,6 +130,54 @@ public class Sudo extends javax.swing.JFrame {
         this.setVisible(false);
         new Home().setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        int proceed = JOptionPane.showConfirmDialog(null, "Are you sure you want to DELETE contents of resource utilisation log?", "WARNING", JOptionPane.ERROR_MESSAGE);        
+            if(proceed == JOptionPane.YES_OPTION){
+                try {
+                    pst=con.prepareStatement("DELETE from resourceUtilisationLog");
+                    pst.executeUpdate();   
+                    pst.close();
+                    JOptionPane.showMessageDialog(null, "Resource utilisation log table CLEARED!");
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
+                    Logger.getLogger(Sudo.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+                int proceed = JOptionPane.showConfirmDialog(null, "Are you sure you want to DELETE all teachers?", "WARNING", JOptionPane.ERROR_MESSAGE);        
+            if(proceed == JOptionPane.YES_OPTION){
+                try {
+                    pst=con.prepareStatement("DELETE from teacher");
+                    pst.executeUpdate();   
+                    pst.close();
+                    JOptionPane.showMessageDialog(null, "Teacher table CLEARED!");
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
+                    Logger.getLogger(Sudo.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+                int proceed = JOptionPane.showConfirmDialog(null, "Are you sure you want to DELETE stock details?", "WARNING", JOptionPane.ERROR_MESSAGE);        
+            if(proceed == JOptionPane.YES_OPTION){
+                try {
+                    pst=con.prepareStatement("DELETE from stockDetails");
+                    pst.executeUpdate();   
+                    pst.close();
+                    JOptionPane.showMessageDialog(null, "Stock Details table CLEARED!");
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
+                    Logger.getLogger(Sudo.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments

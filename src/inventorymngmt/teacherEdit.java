@@ -34,7 +34,8 @@ public class teacherEdit extends javax.swing.JFrame {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/InventoryMgmtRIT?zeroDateTimeBehavior=CONVERT_TO_NULL","root","password");
         }
         catch(ClassNotFoundException | SQLException e){
-            System.out.println(e);
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
+                    Logger.getLogger(teacherEdit.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -211,7 +212,8 @@ public class teacherEdit extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Teacher Added!");
                 t1.setText("");
         } catch (SQLException ex) {
-                Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
+                    Logger.getLogger(teacherEdit.class.getName()).log(Level.SEVERE, null, ex);
         }
         }
 
@@ -228,7 +230,8 @@ public class teacherEdit extends javax.swing.JFrame {
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
+                    Logger.getLogger(teacherEdit.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -245,6 +248,7 @@ public class teacherEdit extends javax.swing.JFrame {
                     pst.executeUpdate();   
                     pst.close();
                 } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
                     Logger.getLogger(teacherEdit.class.getName()).log(Level.SEVERE, null, ex);
                 }
                     t2.removeAllItems();

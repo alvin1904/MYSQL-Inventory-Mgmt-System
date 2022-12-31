@@ -34,7 +34,8 @@ public class updateInventory extends javax.swing.JFrame {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/InventoryMgmtRIT?zeroDateTimeBehavior=CONVERT_TO_NULL","root","password");
         }
         catch(ClassNotFoundException | SQLException e){
-            System.out.println(e);
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
+                    Logger.getLogger(updateInventory.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -282,7 +283,8 @@ public class updateInventory extends javax.swing.JFrame {
                 item1.setText("");
                 count1.setText("");
         } catch (SQLException ex) {
-                Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
+                    Logger.getLogger(updateInventory.class.getName()).log(Level.SEVERE, null, ex);
         }
         }
         
@@ -300,7 +302,8 @@ public class updateInventory extends javax.swing.JFrame {
                 item2.setSelectedIndex(0);
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
+                    Logger.getLogger(updateInventory.class.getName()).log(Level.SEVERE, null, ex);
             }
 
 
@@ -326,7 +329,8 @@ public class updateInventory extends javax.swing.JFrame {
                     while(rs.next())
                         count2.setText(rs.getString("presentCount"));
             } catch (SQLException ex) {
-                    Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
+                    Logger.getLogger(updateInventory.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
             
@@ -337,7 +341,7 @@ public class updateInventory extends javax.swing.JFrame {
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
         if(count2.getText().equals("") || count3.getText().equals("")){
-            System.out.println("Enter details and try again! error handle here");
+            JOptionPane.showMessageDialog(null, "Enter details and try again!");
         }else{
             int count2a = Integer.parseInt(count2.getText());
             int count3a = Integer.parseInt(count3.getText());
@@ -346,11 +350,11 @@ public class updateInventory extends javax.swing.JFrame {
                     try{
                         count2item = item2.getSelectedItem().toString();
                     }catch(NullPointerException e){
-                        System.out.println(e);
+                        JOptionPane.showMessageDialog(null, "Enter details and try again!");
                     }
 
                     if(count2item.equals("")){
-                        System.out.println("error handle here");
+                        JOptionPane.showMessageDialog(null, "Enter details and try again!");
                     }
                     
             int proceed = JOptionPane.showConfirmDialog(null, "Make the changes permenant?", "Alert", JOptionPane.ERROR_MESSAGE);        
@@ -367,7 +371,8 @@ public class updateInventory extends javax.swing.JFrame {
                     count3.setText("");
                     JOptionPane.showMessageDialog(null, "Item edited!");
                 } catch (SQLException ex) {
-                    Logger.getLogger(teacherEdit.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
+                    Logger.getLogger(updateInventory.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             

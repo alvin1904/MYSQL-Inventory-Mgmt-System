@@ -23,7 +23,6 @@ import javax.swing.JOptionPane;
 public class addRequest extends javax.swing.JFrame {
 
     Connection con =null;
-    Statement st = null;
     PreparedStatement pst = null;  
     ResultSet rs = null;
     /**
@@ -37,7 +36,8 @@ public class addRequest extends javax.swing.JFrame {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/InventoryMgmtRIT?zeroDateTimeBehavior=CONVERT_TO_NULL","root","password");
         }
         catch(ClassNotFoundException | SQLException e){
-            System.out.println(e);
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
+                    Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -273,7 +273,8 @@ public class addRequest extends javax.swing.JFrame {
                             while(rs.next())
                                 target = Integer.parseInt(rs.getString("presentCount"));
                     } catch (SQLException ex) {
-                            Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
+                    Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 
                     if(target<qnty){
@@ -320,7 +321,8 @@ public class addRequest extends javax.swing.JFrame {
                 }
 
             } catch (SQLException ex) {
-                Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
+                    Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
             }
             
             
@@ -332,7 +334,8 @@ public class addRequest extends javax.swing.JFrame {
                     pst.close();
                     JOptionPane.showMessageDialog(null, "Request accepted!");
                 } catch (SQLException ex) {
-                    Logger.getLogger(teacherEdit.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
+                    Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
         }

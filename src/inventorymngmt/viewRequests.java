@@ -34,7 +34,8 @@ public class viewRequests extends javax.swing.JFrame {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/InventoryMgmtRIT?zeroDateTimeBehavior=CONVERT_TO_NULL","root","password");
         }
         catch(ClassNotFoundException | SQLException e){
-            System.out.println(e);
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
+                    Logger.getLogger(viewRequests.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -231,7 +232,8 @@ public class viewRequests extends javax.swing.JFrame {
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
+                    Logger.getLogger(viewRequests.class.getName()).log(Level.SEVERE, null, ex);
         }
         
             in.removeAllItems();
@@ -244,7 +246,8 @@ public class viewRequests extends javax.swing.JFrame {
                 in.setSelectedIndex(0);
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
+                    Logger.getLogger(viewRequests.class.getName()).log(Level.SEVERE, null, ex);
             }
             
             
@@ -301,7 +304,8 @@ public class viewRequests extends javax.swing.JFrame {
                 }
             
             } catch (SQLException ex) {
-                    Logger.getLogger(addRequest.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
+                    Logger.getLogger(viewRequests.class.getName()).log(Level.SEVERE, null, ex);
             }
         
     }//GEN-LAST:event_jButton3ActionPerformed

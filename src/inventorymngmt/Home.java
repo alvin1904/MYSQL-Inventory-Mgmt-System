@@ -4,17 +4,35 @@
  */
 package inventorymngmt;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author alvin1904
  */
 public class Home extends javax.swing.JFrame {
-
+    Connection con =null;
+    PreparedStatement pst = null;  
+    ResultSet rs = null;
     /**
      * Creates new form Home
      */
     public Home() {
         initComponents();
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/InventoryMgmtRIT?zeroDateTimeBehavior=CONVERT_TO_NULL","root","password");
+        }
+        catch(ClassNotFoundException | SQLException e){
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
+        }
     }
 
     /**
@@ -35,9 +53,9 @@ public class Home extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         suname = new javax.swing.JTextField();
-        spasswd = new javax.swing.JTextField();
         jButton5 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
+        spasswd = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -94,8 +112,6 @@ public class Home extends javax.swing.JFrame {
 
         suname.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
 
-        spasswd.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
-
         jButton5.setBackground(new java.awt.Color(0, 0, 0));
         jButton5.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         jButton5.setForeground(new java.awt.Color(255, 255, 255));
@@ -107,6 +123,8 @@ public class Home extends javax.swing.JFrame {
         });
 
         jLabel4.setText("OR");
+
+        spasswd.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -131,17 +149,14 @@ public class Home extends javax.swing.JFrame {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                    .addGap(341, 341, 341)
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                            .addGap(341, 341, 341)
-                                            .addComponent(jLabel2))
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                            .addGap(124, 124, 124)
-                                            .addComponent(jLabel3)))
+                                        .addComponent(jLabel2)
+                                        .addComponent(jLabel3))
                                     .addGap(69, 69, 69)
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(spasswd, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
-                                        .addComponent(suname))))
+                                        .addComponent(suname)
+                                        .addComponent(spasswd, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE))))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(163, 163, 163)
                                 .addComponent(jLabel4)))
@@ -157,13 +172,13 @@ public class Home extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(suname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel2))
-                                .addGap(16, 16, 16))))
+                                .addGap(16, 16, 16))
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(57, 57, 57)
                         .addComponent(jLabel4)))
@@ -171,8 +186,8 @@ public class Home extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel3)
-                        .addComponent(spasswd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(spasswd, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel3)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -220,8 +235,33 @@ public class Home extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
-        new Sudo().setVisible(true);
+        String suser="", spass="";
+        int count=0;
+        suser = suname.getText();
+        spass = spasswd.getText();
+        try{
+            pst=con.prepareStatement("SELECT COUNT(*) as 'count' FROM sudoUsers where username=(?) and password = (?)");
+            pst.setString(1,suser);
+            pst.setString(2,spass);
+            rs=pst.executeQuery();
+            rs=pst.executeQuery();
+            while(rs.next())
+                count = Integer.parseInt(rs.getString("count"));
+            if(count==1){
+                this.setVisible(false);
+                new Sudo().setVisible(true);
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Sorry, wrong credentials, try again!");
+            }
+            
+        }catch(SQLException e){
+                    JOptionPane.showMessageDialog(null, "SQL Error!");
+                    Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+        
+
     }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
@@ -270,7 +310,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField spasswd;
+    private javax.swing.JPasswordField spasswd;
     private javax.swing.JTextField suname;
     // End of variables declaration//GEN-END:variables
 }
